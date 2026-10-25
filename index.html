@@ -82,6 +82,10 @@
   .desc p{margin:0 0 8px;font-size:14px;line-height:1.55}
   .desc .k{font-weight:700;color:var(--navy)}
   .foot{text-align:center;font-size:12px;color:var(--mut);margin-top:18px}
+  .circ{display:block;width:100%;max-width:320px;margin:10px auto 0}
+  .circ .ql{font:800 30px "Segoe UI",Roboto,Arial,sans-serif;text-anchor:middle}
+  .circ .ax{font:600 10.5px "Segoe UI",Roboto,Arial,sans-serif;fill:#5f6b7a;text-anchor:middle}
+  .note{margin:14px 0 0;padding-top:12px;border-top:1px solid var(--line);font-size:12px;color:var(--mut);line-height:1.5}
   .spin{width:18px;height:18px;border:3px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:s .8s linear infinite}
   @keyframes s{to{transform:rotate(360deg)}}
   .loading{color:var(--mut);font-size:14px;padding:12px 14px}
@@ -101,7 +105,7 @@
 var API = "https://script.google.com/macros/s/AKfycbxQcjiJRFP2c41Bz3GRTUa3uyEVZEVStWYuIKizo_YRZwnJooacF8beWSt3tLUa5Puh/exec";
 (function(){
 "use strict";
-/* ===== 16 item pilihan paksa. Setiap pilihan dilabel gaya D/I/S/C (tidak dipaparkan kepada peserta). ===== */
+/* ===== 24 item pilihan paksa. Setiap pilihan dilabel gaya D/I/S/C (tidak dipaparkan kepada peserta). ===== */
 var ITEMS=[
  {q:["Dalam mesyuarat unit, saya biasanya…","In a unit meeting, I usually…"],o:{
   D:["Mendesak supaya keputusan dibuat dengan cepat","Push for a decision to be made quickly"],
@@ -182,8 +186,63 @@ var ITEMS=[
   D:["Bertindak segera untuk membetulkannya","Act immediately to fix it"],
   I:["Yakinkan pasukan bahawa kita boleh atasinya","Reassure the team that we can handle it"],
   S:["Pastikan tiada siapa yang rasa dipersalahkan","Make sure no one feels blamed"],
-  C:["Kaji punca dan dokumenkan pembetulan","Investigate the root cause and document the fix"]}}
+  C:["Kaji punca dan dokumenkan pembetulan","Investigate the root cause and document the fix"]}},
+ {q:["Apabila mesyuarat berlarutan tanpa keputusan, saya…","When a meeting drags on with no decision, I…"],o:{
+  D:["Cadangkan keputusan dan minta persetujuan segera","Propose a decision and ask for agreement now"],
+  I:["Ceriakan suasana supaya semua kekal terlibat","Lighten the mood so everyone stays engaged"],
+  S:["Bersabar dan beri ruang semua orang bercakap","Stay patient and let everyone have their say"],
+  C:["Ringkaskan fakta yang ada dan apa yang masih kurang","Summarise the facts we have and what is still missing"]}},
+ {q:["Apabila rakan sekerja minta bantuan pada saat akhir, saya…","When a colleague asks for help at the last minute, I…"],o:{
+  D:["Bantu, tetapi tegaskan supaya tidak berulang","Help, but make clear it should not happen again"],
+  I:["Bantu dengan senang hati dan jadikan kerja berpasukan","Gladly help and turn it into teamwork"],
+  S:["Bantu walaupun kerja saya sendiri tertangguh","Help even if my own work is delayed"],
+  C:["Semak skop dan masa dahulu sebelum bersetuju","Check the scope and timing before agreeing"]}},
+ {q:["Hari bekerja yang ideal bagi saya…","My ideal working day is…"],o:{
+  D:["Penuh keputusan penting dan sasaran mencabar","Full of key decisions and stretch targets"],
+  I:["Banyak interaksi dan perbincangan","Full of interaction and discussion"],
+  S:["Tenang, teratur dan boleh dijangka","Calm, orderly and predictable"],
+  C:["Ada masa fokus tanpa gangguan untuk kerja teliti","One with uninterrupted time for careful work"]}},
+ {q:["Apabila memberi maklum balas kepada staf, saya…","When giving feedback to staff, I…"],o:{
+  D:["Terus kepada isu dan apa yang perlu diubah","Go straight to the issue and what must change"],
+  I:["Mula dengan pujian dan kata-kata semangat","Start with praise and encouragement"],
+  S:["Pilih kata-kata dengan berhati-hati supaya tidak menyinggung","Choose my words carefully so as not to offend"],
+  C:["Tunjukkan contoh dan bukti yang spesifik","Show specific examples and evidence"]}},
+ {q:["Berkenaan risiko dalam kerja, saya…","When it comes to risk at work, I…"],o:{
+  D:["Sanggup ambil risiko jika hasilnya besar","Will take risks if the payoff is big"],
+  I:["Yakin perkara akan berjalan dengan baik","Trust that things will work out"],
+  S:["Lebih suka cara yang selamat dan teruji","Prefer the safe, proven way"],
+  C:["Nilai setiap risiko dengan teliti dahulu","Assess each risk carefully first"]}},
+ {q:["Dalam pasukan, saya biasanya menjadi…","In a team, I usually become…"],o:{
+  D:["Orang yang memacu pasukan ke sasaran","The one driving the team to the goal"],
+  I:["Orang yang menyatukan dan memberi semangat","The one who brings people together and energises them"],
+  S:["Orang yang menyokong dan menenangkan","The one who supports and steadies others"],
+  C:["Orang yang menjaga kualiti dan ketepatan","The one who safeguards quality and accuracy"]}},
+ {q:["Apabila satu peraturan melambatkan kerja, saya…","When a rule slows the work down, I…"],o:{
+  D:["Cari jalan yang sah untuk mempercepatkannya","Look for a legitimate way to speed things up"],
+  I:["Pujuk pihak berkenaan untuk beri kelonggaran","Persuade those involved to allow some flexibility"],
+  S:["Tetap ikut walaupun lebih lambat","Follow it anyway, even if it is slower"],
+  C:["Pastikan saya faham sebab peraturan itu wujud","Make sure I understand why the rule exists"]}},
+ {q:["Pencapaian yang paling memuaskan hati saya ialah…","The achievement that satisfies me most is…"],o:{
+  D:["Menang dalam cabaran yang sukar","Winning a tough challenge"],
+  I:["Dihargai dan diiktiraf oleh orang lain","Being appreciated and recognised by others"],
+  S:["Membantu pasukan berjaya bersama","Helping the team succeed together"],
+  C:["Menghasilkan kerja yang tepat tanpa kesilapan","Producing accurate, error-free work"]}}
 ];
+/* 12 gaya pada model bulatan (huraian ringkas, BM/BI) */
+var BLEND={
+ D:["Tegas dan berfokus hasil; suka cabaran dan keputusan pantas.","Firm and results-focused; drawn to challenges and quick decisions."],
+ Di:["Berani dan bertenaga; suka mengetuai inisiatif baharu.","Bold and energetic; likes to lead new initiatives."],
+ iD:["Optimis dan pantas bertindak; menggerakkan orang lain.","Optimistic and quick to act; gets others moving."],
+ i:["Mesra, bersemangat dan suka bekerjasama.","Warm, enthusiastic and collaborative."],
+ iS:["Ramah dan mahu semua orang rasa dilibatkan.","Friendly and keen that everyone feels included."],
+ Si:["Penyokong yang positif; mendahulukan keperluan orang lain.","A positive supporter who puts others' needs first."],
+ S:["Sabar, setia dan menghargai persekitaran yang stabil.","Patient, loyal and values a stable environment."],
+ SC:["Tenang, diplomatik dan konsisten.","Calm, diplomatic and consistent."],
+ CS:["Teratur dan cermat; mengelak risiko yang tidak perlu.","Orderly and careful; avoids unnecessary risk."],
+ C:["Analitikal dan tepat; peka terhadap kesilapan.","Analytical and precise; alert to errors."],
+ CD:["Skeptikal dan cekap; memastikan kerja dibuat dengan betul.","Skeptical and efficient; makes sure work is done right."],
+ DC:["Terus terang dan berdikari; menuntut standard tinggi.","Direct and independent; expects high standards."]
+};
 var STYLE={
  D:{c:"var(--D)",n:["Dominan","Dominance"],
     s:["Berfokus hasil, pantas membuat keputusan dan suka cabaran.","Results-focused, quick to decide and drawn to challenges."],
@@ -230,7 +289,7 @@ function viewStart(){
   $("#app").innerHTML=
    '<div class="card"><h2>Sebelum mula<span class="en">Before you start</span></h2>'+
    '<ul class="how">'+
-   '<li>16 soalan, kira-kira 5–7 minit.<span class="en">16 questions, about 5–7 minutes.</span></li>'+
+   '<li>24 soalan, kira-kira 8–10 minit.<span class="en">24 questions, about 8–10 minutes.</span></li>'+
    '<li>Bagi setiap soalan, pilih <b>satu</b> pernyataan yang <b style="color:var(--ok)">PALING</b> menggambarkan diri anda dan <b>satu</b> yang <b style="color:var(--bad)">PALING KURANG</b> menggambarkan diri anda.<span class="en">For each question, pick ONE statement that is MOST like you and ONE that is LEAST like you.</span></li>'+
    '<li>Jawab berdasarkan diri anda <b>di tempat kerja</b>, bukan diri yang anda harapkan. Tiada jawapan betul atau salah.<span class="en">Answer as you really are at work, not as you wish to be. There are no right or wrong answers.</span></li>'+
    '</ul></div>'+
@@ -295,7 +354,7 @@ function viewSubmit(){
   var p=me(),miss=S.ans.map(function(a,k){return a.m&&a.l?null:k+1;}).filter(Boolean);
   $("#app").innerHTML=
    '<div class="card"><h2>Hampir siap, '+esc(p?p.name:"")+'<span class="en">Almost done</span></h2>'+
-   (miss.length?'<p class="hint" style="color:var(--bad)">Soalan belum lengkap: '+miss.join(", ")+'</p>':'<p class="hint">Semua 16 soalan telah dijawab.<span class="en">All 16 questions answered.</span></p>')+
+   (miss.length?'<p class="hint" style="color:var(--bad)">Soalan belum lengkap: '+miss.join(", ")+'</p>':'<p class="hint">Semua soalan telah dijawab.<span class="en">All questions answered.</span></p>')+
    '<span class="lbl">Catatan (pilihan)<span class="en">Comment (optional)</span></span>'+
    '<textarea id="note" rows="2" maxlength="1000" placeholder="Apa yang anda harap dapat daripada program ini?"></textarea>'+
    '</div><div class="err" id="err" role="alert"></div>'+
@@ -311,22 +370,49 @@ function viewSubmit(){
 }
 
 /* ---------- Skrin 4: keputusan ---------- */
+function circle(r){
+  /* Bulatan DISC: D kiri-atas, i kanan-atas, S kanan-bawah, C kiri-bawah. Titik = kedudukan anda. */
+  var c=150,R=120,a=r.angle*Math.PI/180,d=Math.max(0.06,r.dist),px=c+d*R*Math.cos(a),py=c-d*R*Math.sin(a);
+  /* setiap kuadran: dari pusat ke titik pertama, lengkok melawan arah jam ke titik kedua */
+  function q(x1,y1,x2,y2,col){return '<path d="M'+c+' '+c+' L'+x1+' '+y1+' A'+R+' '+R+' 0 0 0 '+x2+' '+y2+' Z" fill="'+col+'" opacity=".16"/>';}
+  return '<svg viewBox="-34 0 368 300" class="circ" role="img" aria-label="Kedudukan anda pada bulatan DISC: '+r.blend+'">'+
+   q(c+R,c,c,c-R,"#e2a400")+q(c,c-R,c-R,c,"#d64545")+q(c-R,c,c,c+R,"#2f6fd6")+q(c,c+R,c+R,c,"#2e9d5b")+
+   '<circle cx="'+c+'" cy="'+c+'" r="'+R+'" fill="none" stroke="#c9d2de"/>'+
+   '<circle cx="'+c+'" cy="'+c+'" r="'+(R/2)+'" fill="none" stroke="#e3e8ef" stroke-dasharray="3 3"/>'+
+   '<line x1="'+(c-R)+'" y1="'+c+'" x2="'+(c+R)+'" y2="'+c+'" stroke="#c9d2de"/><line x1="'+c+'" y1="'+(c-R)+'" x2="'+c+'" y2="'+(c+R)+'" stroke="#c9d2de"/>'+
+   '<text x="72" y="82" class="ql" fill="#d64545">D</text><text x="228" y="82" class="ql" fill="#c08c00">i</text>'+
+   '<text x="228" y="238" class="ql" fill="#2e9d5b">S</text><text x="72" y="238" class="ql" fill="#2f6fd6">C</text>'+
+   '<text x="150" y="20" class="ax">Aktif · Tegas</text><text x="150" y="292" class="ax">Tenang · Sederhana</text>'+
+   '<text x="-30" y="154" class="ax" style="text-anchor:start">Logik</text><text x="330" y="154" class="ax" style="text-anchor:end">Mesra</text>'+
+   '<circle cx="'+px.toFixed(1)+'" cy="'+py.toFixed(1)+'" r="11" fill="#0f2a4a" stroke="#fff" stroke-width="3"/>'+
+   '</svg>';
+}
 function viewResult(r){
   var p=me(),st=STYLE[r.disc1],blend=[r.disc1].concat(r.disc2?[r.disc2]:[]);
+  var bd=BLEND[r.blend]||BLEND[r.disc1==="I"?"i":r.disc1];
+  var strength=r.balanced?["Seimbang: anda mudah menyesuaikan gaya mengikut situasi.","Balanced: you adapt your style to the situation."]
+    :r.dist>=0.6?["Kecenderungan kuat: gaya ini sangat jelas dalam tingkah laku anda.","Strong tendency: this style shows clearly in your behaviour."]
+    :r.dist>=0.3?["Kecenderungan sederhana: gaya ini jelas, dengan unsur gaya lain.","Moderate tendency: clear, with elements of other styles."]
+    :["Kecenderungan ringan: anda dekat dengan pusat dan fleksibel.","Mild tendency: close to the centre and flexible."];
   var bars=KEYS.slice().sort(function(a,b){return r.pct[b]-r.pct[a];}).map(function(s){
     return '<div class="br" style="--c:'+STYLE[s].c+'"><span><b>'+s+'</b> · '+STYLE[s].n[0]+'</span><div class="tr"><i style="width:'+r.pct[s]+'%"></i></div><span class="v">'+r.pct[s]+'</span></div>';
   }).join("");
   var sec=r.disc2?'<p><span class="k">Gaya kedua: '+r.disc2+' ('+STYLE[r.disc2].n[0]+').</span> '+esc(STYLE[r.disc2].s[0])+'<span class="en">Secondary style: '+STYLE[r.disc2].n[1]+'. '+esc(STYLE[r.disc2].s[1])+'</span></p>':'';
   $("#app").innerHTML=
    '<div class="card"><div class="res-head"><div class="ic">✓</div><h2>Terima kasih, '+esc(p?p.name:"")+'!<span class="en">Your result has been recorded.</span></h2>'+
-   '<div class="blend">'+blend.map(function(s){return '<span style="--c:'+STYLE[s].c+'">'+s+'</span>';}).join("")+'</div>'+
-   '<div style="font-weight:700;color:var(--navy);margin-top:4px">Gaya kerja anda: '+blend.join("/")+'</div></div></div>'+
+   '<div class="blend">'+blend.map(function(s){return '<span style="--c:'+STYLE[s].c+'">'+(s==="I"?"i":s)+'</span>';}).join("")+'</div>'+
+   '<div style="font-weight:700;color:var(--navy);margin-top:4px">Gaya kerja anda: '+esc(r.blend)+'</div>'+
+   '<p class="hint" style="margin:6px 0 0">'+bi(bd)+'</p></div></div>'+
+   '<div class="card"><h2>Kedudukan anda pada bulatan DISC<span class="en">Your position on the DISC circle</span></h2>'+circle(r)+
+   '<p class="hint" style="margin:8px 0 0"><b>'+esc(strength[0])+'</b><span class="en">'+esc(strength[1])+'</span></p>'+
+   '<p class="hint" style="margin:6px 0 0">Titik yang jauh dari pusat menunjukkan kecenderungan yang lebih kuat ke arah gaya itu.<span class="en">The further the dot is from the centre, the stronger the pull toward that style.</span></p></div>'+
    '<div class="card"><h2>Profil skor<span class="en">Score profile (0–100; garis tengah = 50)</span></h2><div class="bars">'+bars+'</div></div>'+
    '<div class="card desc"><h2>'+r.disc1+' · '+st.n[0]+'<span class="en">'+st.n[1]+'</span></h2>'+
    '<h3>Kekuatan · Strengths</h3><p>'+bi(st.s)+'</p>'+
    '<h3>Titik buta · Blind spot</h3><p>'+bi(st.b)+'</p>'+
    '<h3>Fokus pembangunan · Development focus</h3><p>'+bi(st.g)+'</p>'+sec+
-   '<p class="hint" style="margin-top:10px">Kita akan bincangkan keputusan ini dalam sesi Modul 1A. Tiada gaya yang lebih baik daripada gaya lain; setiap gaya membawa kekuatan berbeza kepada pasukan.<span class="en">We will discuss this in Module 1A. No style is better than another; each brings different strengths to a team.</span></p></div>'+foot();
+   '<p class="hint" style="margin-top:10px">Kita akan bincangkan keputusan ini dalam sesi Modul 1A. Tiada gaya yang lebih baik daripada gaya lain; setiap gaya membawa kekuatan berbeza kepada pasukan.<span class="en">We will discuss this in Module 1A. No style is better than another; each brings different strengths to a team.</span></p>'+
+   '<p class="note">Ujian ini ialah alat refleksi bengkel berdasarkan model DISC dua dimensi Marston. Ia bukan instrumen psikometrik yang disahkan, dan tidak digunakan untuk keputusan perjawatan.<span class="en">This is a workshop reflection tool based on Marston\'s two-dimensional DISC model. It is not a validated psychometric instrument and is not used for HR decisions.</span></p></div>'+foot();
   window.scrollTo({top:0,behavior:"smooth"});
 }
 
