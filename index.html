@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ujian Gaya Kerja DISC · JANM WA13 2026</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+  :root{--navy:#0f2a4a;--navy2:#1b3f6b;--gold:#c9a227;--gold2:#f3e3a6;--ink:#1d2733;--mut:#5f6b7a;--bg:#f4f6fa;--line:#dfe5ee;--ok:#1f8a4c;--bad:#c0392b;
+    --D:#d64545;--I:#e2a400;--S:#2e9d5b;--C:#2f6fd6}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);-webkit-text-size-adjust:100%}
+  .hero{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:24px 18px 52px}
+  .hero .in{max-width:640px;margin:0 auto}
+  .tag{display:inline-block;background:var(--gold);color:var(--navy);font-size:11px;font-weight:700;letter-spacing:.08em;padding:4px 10px;border-radius:99px}
+  .hero h1{font-size:23px;margin:12px 0 4px;line-height:1.2}
+  .hero .en{font-size:13px;color:var(--gold2);margin:0}
+  main{max-width:640px;margin:-34px auto 40px;padding:0 14px}
+  .card{background:#fff;border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:0 4px 18px rgba(15,42,74,.08);border:1px solid var(--line)}
+  h2{font-size:17px;margin:0 0 4px;color:var(--navy)}
+  .en{color:var(--mut);font-size:12.5px;font-style:italic;display:block;margin-top:2px;font-weight:400}
+  .hint{font-size:14px;color:var(--mut);margin:0 0 12px;line-height:1.55}
+  ul.how{margin:0 0 4px;padding-left:18px;font-size:14px;line-height:1.6}
+  ul.how li{margin-bottom:4px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:12px;padding:14px 18px;font-size:15.5px;font-weight:600;cursor:pointer;font-family:inherit}
+  .btn.navy{background:var(--navy);color:#fff}
+  .btn.ghost{background:#fff;color:var(--navy);border:1.5px solid var(--line)}
+  .btn[disabled]{opacity:.4;cursor:not-allowed}
+  .btn.full{width:100%}
+  input[type=text],textarea{width:100%;font:inherit;font-size:16px;padding:12px 13px;border:1.5px solid var(--line);border-radius:12px;background:#fff;color:var(--ink)}
+  input:focus,textarea:focus{outline:none;border-color:var(--navy2);box-shadow:0 0 0 3px rgba(27,63,107,.15)}
+  .names{max-height:260px;overflow:auto;margin-top:10px;border:1px solid var(--line);border-radius:12px}
+  .nm{display:flex;justify-content:space-between;align-items:center;gap:8px;width:100%;text-align:left;background:#fff;border:0;border-top:1px solid var(--line);padding:12px 14px;font:inherit;font-size:15px;cursor:pointer;color:var(--ink)}
+  .nm:first-child{border-top:0}
+  .nm[aria-pressed=true]{background:#fff8e1;box-shadow:inset 4px 0 0 var(--gold);font-weight:600}
+  .nm .no{color:var(--mut);font-size:13px;margin-right:8px;font-variant-numeric:tabular-nums}
+  .sent{font-size:11.5px;color:var(--ok);background:#e8f6ee;padding:3px 8px;border-radius:99px;white-space:nowrap}
+  .chosen{margin-top:10px;font-size:14px;color:var(--navy);font-weight:600}
+  .lbl{font-size:13.5px;font-weight:600;margin:14px 0 8px;display:block}
+  .err{display:none;background:#fdecea;color:var(--bad);border-radius:12px;padding:12px 14px;font-size:14px;margin-bottom:12px}
+  /* soalan */
+  .prog{display:flex;align-items:center;gap:10px;margin-bottom:14px;font-size:13px;color:var(--mut);font-variant-numeric:tabular-nums}
+  .bar{flex:1;height:8px;background:#e8edf4;border-radius:99px;overflow:hidden}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),#e0b93a);border-radius:99px;transition:width .25s}
+  .stem{font-size:17px;font-weight:700;color:var(--navy);line-height:1.35}
+  .stem .en{font-size:13.5px}
+  .opts{display:grid;gap:10px;margin-top:14px}
+  .op{border:1.5px solid var(--line);border-radius:14px;padding:12px 12px 10px;background:#fff;transition:.12s}
+  .op.m{border-color:var(--ok);background:#f0faf4}
+  .op.l{border-color:#d9a3a0;background:#fdf4f3}
+  .op .t{font-size:15px;line-height:1.4}
+  .op .t .en{font-size:12.5px}
+  .pick{display:flex;gap:8px;margin-top:10px}
+  .pick button{flex:1;border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:8px 6px;font:inherit;font-size:13px;font-weight:600;color:var(--mut);cursor:pointer}
+  .pick button.pm[aria-pressed=true]{background:var(--ok);border-color:var(--ok);color:#fff}
+  .pick button.pl[aria-pressed=true]{background:var(--bad);border-color:var(--bad);color:#fff}
+  .nav{display:flex;gap:10px;margin-top:16px}
+  .nav .btn{flex:1}
+  .legend{font-size:12.5px;color:var(--mut);margin-top:10px;line-height:1.5}
+  /* keputusan */
+  .res-head{text-align:center;padding:6px 0 4px}
+  .res-head .ic{width:60px;height:60px;border-radius:50%;background:#e8f6ee;color:var(--ok);display:grid;place-items:center;font-size:30px;margin:0 auto 10px}
+  .blend{display:inline-flex;gap:6px;margin:10px 0 2px}
+  .blend span{font-weight:800;font-size:24px;width:52px;height:52px;border-radius:14px;display:grid;place-items:center;color:#fff;background:var(--c)}
+  .bars{display:grid;gap:10px;margin-top:6px}
+  .br{display:grid;grid-template-columns:110px 1fr 40px;gap:10px;align-items:center;font-size:13.5px}
+  .br .tr{height:14px;background:#eef2f7;border-radius:99px;overflow:hidden;position:relative}
+  .br .tr:after{content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;background:#c9d2de}
+  .br .tr i{display:block;height:100%;background:var(--c);border-radius:99px}
+  .br b{color:var(--c)}
+  .br .v{text-align:right;font-variant-numeric:tabular-nums;color:var(--mut)}
+  .desc h3{margin:14px 0 6px;font-size:15px;color:var(--navy)}
+  .desc p{margin:0 0 8px;font-size:14px;line-height:1.55}
+  .desc .k{font-weight:700;color:var(--navy)}
+  .foot{text-align:center;font-size:12px;color:var(--mut);margin-top:18px}
+  .spin{width:18px;height:18px;border:3px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:s .8s linear infinite}
+  @keyframes s{to{transform:rotate(360deg)}}
+  .loading{color:var(--mut);font-size:14px;padding:12px 14px}
+</style>
+</head>
+<body>
+<div class="hero"><div class="in">
+  <span class="tag">JANM WA13 LEADERSHIP 2026 · MODUL 1</span>
+  <h1>Ujian Gaya Kerja DISC</h1>
+  <p class="en">DISC Work Style Assessment</p>
+</div></div>
+
+<main id="app"></main>
+
+<script>
+/* ====== URL web app Apps Script (…/exec). Wajib diisi untuk versi GitHub Pages. ====== */
+var API = "https://script.google.com/macros/s/AKfycbxQcjiJRFP2c41Bz3GRTUa3uyEVZEVStWYuIKizo_YRZwnJooacF8beWSt3tLUa5Puh/exec";
+(function(){
+"use strict";
+/* ===== 16 item pilihan paksa. Setiap pilihan dilabel gaya D/I/S/C (tidak dipaparkan kepada peserta). ===== */
+var ITEMS=[
+ {q:["Dalam mesyuarat unit, saya biasanya…","In a unit meeting, I usually…"],o:{
+  D:["Mendesak supaya keputusan dibuat dengan cepat","Push for a decision to be made quickly"],
+  I:["Mencetuskan idea dan menghidupkan suasana","Spark ideas and lift the mood"],
+  S:["Mendengar dan memastikan semua orang selesa","Listen and make sure everyone is comfortable"],
+  C:["Menyemak fakta dan angka sebelum bersetuju","Check the facts and figures before agreeing"]}},
+ {q:["Apabila tarikh akhir laporan kewangan semakin dekat, saya…","When a financial report deadline is close, I…"],o:{
+  D:["Ambil alih dan tetapkan siapa buat apa","Take charge and assign who does what"],
+  I:["Kekalkan semangat pasukan supaya tidak tertekan","Keep the team's spirits up so no one feels the strain"],
+  S:["Bantu rakan yang ketinggalan dengan tenang","Calmly help colleagues who are falling behind"],
+  C:["Pastikan setiap angka disemak dan tepat","Make sure every figure is checked and accurate"]}},
+ {q:["Saya paling dihargai kerana…","I am most appreciated for…"],o:{
+  D:["Mencapai sasaran","Hitting targets"],
+  I:["Membawa tenaga positif kepada pasukan","Bringing positive energy to the team"],
+  S:["Boleh diharap dan setia","Being dependable and loyal"],
+  C:["Ketelitian dan kualiti kerja","Thoroughness and quality of work"]}},
+ {q:["Apabila arahan baharu diperkenalkan tanpa penjelasan, saya…","When a new directive is introduced without explanation, I…"],o:{
+  D:["Terus laksanakan dan selesaikan isu sepanjang jalan","Implement it right away and sort out issues along the way"],
+  I:["Berbincang dengan rakan untuk dapatkan pandangan mereka","Talk it over with colleagues to hear their views"],
+  S:["Ikut arahan tetapi perlukan masa untuk menyesuaikan diri","Follow it, but need time to adjust"],
+  C:["Minta pekeliling atau garis panduan bertulis","Ask for the circular or written guidelines"]}},
+ {q:["Ketika berbeza pendapat dengan rakan sekerja, saya…","When I disagree with a colleague, I…"],o:{
+  D:["Nyatakan pendirian saya secara terus","State my position directly"],
+  I:["Pujuk mereka dengan cara yang mesra","Persuade them in a friendly way"],
+  S:["Elak konflik dan cari titik persamaan","Avoid conflict and look for common ground"],
+  C:["Bentangkan bukti dan logik","Present evidence and logic"]}},
+ {q:["Perkataan yang paling menggambarkan gaya kerja saya:","The words that best describe my work style:"],o:{
+  D:["Tegas dan berani","Decisive and bold"],
+  I:["Ramah dan bersemangat","Friendly and enthusiastic"],
+  S:["Sabar dan stabil","Patient and steady"],
+  C:["Teratur dan cermat","Organised and careful"]}},
+ {q:["Dalam projek baharu, saya paling suka…","In a new project, I most enjoy…"],o:{
+  D:["Menetapkan hala tuju dan sasaran","Setting the direction and targets"],
+  I:["Menjana idea dan meyakinkan orang lain","Generating ideas and winning people over"],
+  S:["Menyokong pasukan supaya kerja berjalan lancar","Supporting the team so work runs smoothly"],
+  C:["Merancang langkah dan prosedur terperinci","Planning detailed steps and procedures"]}},
+ {q:["Perkara yang paling mengganggu saya di tempat kerja:","What bothers me most at work:"],o:{
+  D:["Kerja yang lambat dan berbelit-belit","Slow, roundabout work"],
+  I:["Suasana kerja yang hambar dan terasing","A dull, isolated work environment"],
+  S:["Perubahan mendadak tanpa amaran","Sudden change without warning"],
+  C:["Kesilapan dan kerja yang cuai","Errors and careless work"]}},
+ {q:["Apabila membuat keputusan, saya lebih bergantung kepada…","When making decisions, I rely more on…"],o:{
+  D:["Gerak hati dan keyakinan sendiri","My own instinct and confidence"],
+  I:["Pandangan dan sokongan orang lain","Other people's views and support"],
+  S:["Cara yang terbukti berkesan sebelum ini","What has worked before"],
+  C:["Data dan analisis yang lengkap","Complete data and analysis"]}},
+ {q:["Di bawah tekanan, saya cenderung…","Under pressure, I tend to…"],o:{
+  D:["Menjadi lebih mendesak","Become more demanding"],
+  I:["Bercakap lebih banyak atau hilang fokus","Talk more or lose focus"],
+  S:["Diam dan memendam perasaan","Go quiet and keep my feelings inside"],
+  C:["Menjadi terlalu kritikal dan berhati-hati","Become overly critical and cautious"]}},
+ {q:["Sebagai ketua, saya mahu dikenali sebagai seseorang yang…","As a leader, I want to be known as someone who…"],o:{
+  D:["Menghasilkan keputusan","Delivers results"],
+  I:["Memberi inspirasi","Inspires people"],
+  S:["Mengambil berat tentang anak buah","Cares for the team"],
+  C:["Adil dan berprinsip","Is fair and principled"]}},
+ {q:["Cara saya berkomunikasi biasanya…","My usual way of communicating is…"],o:{
+  D:["Ringkas dan terus kepada inti","Brief and to the point"],
+  I:["Ekspresif, dengan cerita dan contoh","Expressive, with stories and examples"],
+  S:["Lembut dan sabar","Gentle and patient"],
+  C:["Tepat dan terperinci","Precise and detailed"]}},
+ {q:["Apabila menerima tugasan yang kurang jelas, saya…","When given an unclear assignment, I…"],o:{
+  D:["Tentukan sendiri cara terbaik dan teruskan","Decide the best approach myself and get going"],
+  I:["Tanya rakan-rakan dan sumbang saran","Ask colleagues and brainstorm"],
+  S:["Tunggu sehingga ada panduan yang lebih jelas","Wait until there is clearer guidance"],
+  C:["Senaraikan soalan dan dapatkan spesifikasi penuh","List my questions and get the full specifications"]}},
+ {q:["Saya paling bermotivasi apabila…","I feel most motivated when…"],o:{
+  D:["Diberi cabaran dan autoriti","I am given challenges and authority"],
+  I:["Diberi pengiktirafan di hadapan orang lain","I am recognised in front of others"],
+  S:["Suasana kerja harmoni dan stabil","The workplace is harmonious and stable"],
+  C:["Ada standard dan jangkaan yang jelas","There are clear standards and expectations"]}},
+ {q:["Rakan sekerja mungkin melihat saya sebagai…","Colleagues may see me as…"],o:{
+  D:["Terlalu tegas","Too forceful"],
+  I:["Kurang teliti","Not detailed enough"],
+  S:["Terlalu berlembut","Too accommodating"],
+  C:["Terlalu perfeksionis","Too much of a perfectionist"]}},
+ {q:["Apabila audit menemui isu dalam unit saya, saya…","When an audit finds an issue in my unit, I…"],o:{
+  D:["Bertindak segera untuk membetulkannya","Act immediately to fix it"],
+  I:["Yakinkan pasukan bahawa kita boleh atasinya","Reassure the team that we can handle it"],
+  S:["Pastikan tiada siapa yang rasa dipersalahkan","Make sure no one feels blamed"],
+  C:["Kaji punca dan dokumenkan pembetulan","Investigate the root cause and document the fix"]}}
+];
+var STYLE={
+ D:{c:"var(--D)",n:["Dominan","Dominance"],
+    s:["Berfokus hasil, pantas membuat keputusan dan suka cabaran.","Results-focused, quick to decide and drawn to challenges."],
+    b:["Boleh kelihatan mendesak dan kurang mendengar, terutama di bawah tekanan.","May come across as pushy and listen less, especially under pressure."],
+    g:["Berhenti sejenak untuk mendengar pandangan pasukan sebelum memutuskan.","Pause to hear the team's views before deciding."]},
+ I:{c:"var(--I)",n:["Pengaruh","Influence"],
+    s:["Bersemangat, meyakinkan dan pandai membina hubungan.","Enthusiastic, persuasive and good at building relationships."],
+    b:["Mudah terlepas butiran dan tindakan susulan.","May overlook details and follow-through."],
+    g:["Tetapkan langkah susulan bertulis selepas setiap perbincangan.","Agree written next steps after every discussion."]},
+ S:{c:"var(--S)",n:["Stabil","Steadiness"],
+    s:["Sabar, setia dan penyokong pasukan yang boleh diharap.","Patient, loyal and a dependable team supporter."],
+    b:["Cenderung mengelak konflik dan lambat menerima perubahan.","Tends to avoid conflict and be slow to embrace change."],
+    g:["Suarakan pandangan lebih awal, walaupun ia berbeza.","Speak up earlier, even when your view differs."]},
+ C:{c:"var(--C)",n:["Teliti","Conscientiousness"],
+    s:["Tepat, analitikal dan menjaga kualiti serta pematuhan.","Accurate, analytical and protective of quality and compliance."],
+    b:["Boleh menjadi terlalu kritikal dan lambat memutuskan jika data tidak lengkap.","Can be overly critical and slow to decide when data is incomplete."],
+    g:["Tetapkan tahap 'cukup baik' dan had masa untuk setiap keputusan.","Define 'good enough' and set a time limit for each decision."]}
+};
+var KEYS=["D","I","S","C"];
+var S={list:[],i:null,needCode:false,code:"",step:-1,ans:[],order:[],busy:false};
+ITEMS.forEach(function(){S.ans.push({m:"",l:""});S.order.push(shuffle(KEYS.slice()));});
+
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function $(s){return document.querySelector(s);}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+function bi(p){return esc(p[0])+'<span class="en">'+esc(p[1])+'</span>';}
+/* Pelayan: dalam Apps Script guna google.script.run; di GitHub Pages guna fetch ke URL web app (API). */
+function run(fn,arg){
+  if(window.google&&google.script&&google.script.run){
+    return new Promise(function(res,rej){var r=google.script.run.withSuccessHandler(res).withFailureHandler(rej);arg===undefined?r[fn]():r[fn](arg);});
+  }
+  if(!API)return Promise.reject(new Error("Pautan pelayan (API) belum ditetapkan. Sila maklumkan urus setia."));
+  var req=fn==="getParticipants"
+    ? fetch(API+"?action=list",{method:"GET"})
+    : fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(arg)});
+  return req.then(function(r){return r.json();}).then(function(j){if(!j.ok)throw new Error(j.error||"Ralat pelayan");return j.data;},
+    function(e){throw new Error((e&&e.message&&e.message.indexOf("Failed to fetch")===-1)?e.message:"Tiada sambungan ke pelayan. Semak internet dan cuba lagi.");});
+}
+function foot(){return '<div class="foot">JANM WA13 Leadership Programme 2026 · 4–5 November 2026 · UUM</div>';}
+function me(){return S.list.filter(function(x){return x.i===S.i;})[0];}
+
+/* ---------- Skrin 1: nama ---------- */
+function viewStart(){
+  $("#app").innerHTML=
+   '<div class="card"><h2>Sebelum mula<span class="en">Before you start</span></h2>'+
+   '<ul class="how">'+
+   '<li>16 soalan, kira-kira 5–7 minit.<span class="en">16 questions, about 5–7 minutes.</span></li>'+
+   '<li>Bagi setiap soalan, pilih <b>satu</b> pernyataan yang <b style="color:var(--ok)">PALING</b> menggambarkan diri anda dan <b>satu</b> yang <b style="color:var(--bad)">PALING KURANG</b> menggambarkan diri anda.<span class="en">For each question, pick ONE statement that is MOST like you and ONE that is LEAST like you.</span></li>'+
+   '<li>Jawab berdasarkan diri anda <b>di tempat kerja</b>, bukan diri yang anda harapkan. Tiada jawapan betul atau salah.<span class="en">Answer as you really are at work, not as you wish to be. There are no right or wrong answers.</span></li>'+
+   '</ul></div>'+
+   '<div class="card"><h2>Pilih nama anda<span class="en">Select your name</span></h2>'+
+   '<input type="text" id="q" placeholder="Taip nama untuk cari… / Type to search" autocomplete="off">'+
+   '<div class="names" id="names"><div class="loading">Memuatkan senarai nama…</div></div>'+
+   '<div class="chosen" id="chosen"></div>'+
+   (S.needCode?'<span class="lbl">Kod program <span class="en" style="display:inline">· Programme code</span></span><input type="text" id="code" autocomplete="off" value="'+esc(S.code)+'">':'')+
+   '</div>'+
+   '<button class="btn navy full" id="go" disabled>Mula ujian · Start →</button>'+foot();
+  $("#q").addEventListener("input",renderNames);
+  $("#names").addEventListener("click",function(e){var b=e.target.closest("[data-i]");if(!b)return;S.i=Number(b.dataset.i);renderNames();});
+  if($("#code"))$("#code").addEventListener("input",function(){S.code=this.value;});
+  $("#go").addEventListener("click",function(){S.step=0;viewItem();window.scrollTo({top:0});});
+  renderNames();
+}
+function renderNames(){
+  var box=$("#names");if(!box)return;
+  if(!S.list.length){box.innerHTML='<div class="loading">'+(S.loaded?"Senarai peserta belum diisi. Sila maklumkan urus setia.":"Memuatkan senarai nama…")+'</div>';return;}
+  var q=$("#q").value.trim().toLowerCase();
+  var l=S.list.filter(function(p){return !q||p.name.toLowerCase().indexOf(q)!==-1;});
+  box.innerHTML=l.length?l.map(function(p){
+    return '<button type="button" class="nm" data-i="'+p.i+'" aria-pressed="'+(S.i===p.i)+'"><span><span class="no">'+String(p.no).padStart(2,"0")+'</span>'+esc(p.name)+'</span>'+(p.sent?'<span class="sent">✓ Sudah jawab</span>':'')+'</button>';
+  }).join(""):'<div class="loading">Tiada nama sepadan.</div>';
+  var p=me();
+  $("#chosen").textContent=p?("✓ "+p.name+(p.sent?" · menjawab semula akan menggantikan keputusan lama":"")):"";
+  $("#go").disabled=!p;
+}
+
+/* ---------- Skrin 2: soalan ---------- */
+function viewItem(){
+  var k=S.step,it=ITEMS[k],a=S.ans[k],n=ITEMS.length;
+  $("#app").innerHTML=
+   '<div class="card">'+
+   '<div class="prog"><span>'+(k+1)+' / '+n+'</span><div class="bar"><i style="width:'+((k)/n*100)+'%"></i></div></div>'+
+   '<div class="stem">'+bi(it.q)+'</div>'+
+   '<div class="opts">'+S.order[k].map(function(s){
+      var cls=a.m===s?" m":a.l===s?" l":"";
+      return '<div class="op'+cls+'"><div class="t">'+bi(it.o[s])+'</div>'+
+       '<div class="pick"><button type="button" class="pm" data-s="'+s+'" data-t="m" aria-pressed="'+(a.m===s)+'">✓ Paling · Most</button>'+
+       '<button type="button" class="pl" data-s="'+s+'" data-t="l" aria-pressed="'+(a.l===s)+'">✗ Paling kurang · Least</button></div></div>';
+   }).join("")+'</div>'+
+   '<div class="legend">Pilih satu <b style="color:var(--ok)">Paling</b> dan satu <b style="color:var(--bad)">Paling kurang</b>.</div>'+
+   '<div class="nav"><button class="btn ghost" id="back">← Kembali</button>'+
+   '<button class="btn navy" id="next"'+(a.m&&a.l?'':' disabled')+'>'+(k===n-1?'Semak & hantar':'Seterusnya →')+'</button></div>'+
+   '</div>'+foot();
+  $(".opts").addEventListener("click",function(e){
+    var b=e.target.closest("[data-s]");if(!b)return;
+    var s=b.dataset.s,t=b.dataset.t,o=t==="m"?"l":"m",wasDone=a.m&&a.l;
+    a[t]=a[t]===s?"":s; if(a[o]===s)a[o]="";
+    viewItem();
+    if(!wasDone&&a.m&&a.l&&k<n-1)setTimeout(function(){if(S.step===k){S.step++;viewItem();}},450);
+  });
+  $("#back").addEventListener("click",function(){if(k===0){S.step=-1;viewStart();}else{S.step--;viewItem();}});
+  $("#next").addEventListener("click",function(){if(k===n-1)viewSubmit();else{S.step++;viewItem();}});
+}
+
+/* ---------- Skrin 3: semak & hantar ---------- */
+function viewSubmit(){
+  var p=me(),miss=S.ans.map(function(a,k){return a.m&&a.l?null:k+1;}).filter(Boolean);
+  $("#app").innerHTML=
+   '<div class="card"><h2>Hampir siap, '+esc(p?p.name:"")+'<span class="en">Almost done</span></h2>'+
+   (miss.length?'<p class="hint" style="color:var(--bad)">Soalan belum lengkap: '+miss.join(", ")+'</p>':'<p class="hint">Semua 16 soalan telah dijawab.<span class="en">All 16 questions answered.</span></p>')+
+   '<span class="lbl">Catatan (pilihan)<span class="en">Comment (optional)</span></span>'+
+   '<textarea id="note" rows="2" maxlength="1000" placeholder="Apa yang anda harap dapat daripada program ini?"></textarea>'+
+   '</div><div class="err" id="err" role="alert"></div>'+
+   '<div class="nav"><button class="btn ghost" id="back">← Kembali</button><button class="btn navy" id="send"'+(miss.length?' disabled':'')+'>Hantar · Submit</button></div>'+foot();
+  $("#back").addEventListener("click",function(){S.step=miss.length?miss[0]-1:ITEMS.length-1;viewItem();});
+  $("#send").addEventListener("click",function(){
+    if(S.busy)return;S.busy=true;var b=this;b.disabled=true;b.innerHTML='<span class="spin"></span> Menghantar…';
+    run("submitDisc",{i:S.i,code:S.code,ans:S.ans,note:$("#note").value}).then(function(r){S.busy=false;viewResult(r);},function(e){
+      S.busy=false;b.disabled=false;b.textContent="Hantar · Submit";
+      var x=$("#err");x.style.display="block";x.textContent=(e&&e.message)||"Gagal menghantar. Semak sambungan internet dan cuba lagi.";
+    });
+  });
+}
+
+/* ---------- Skrin 4: keputusan ---------- */
+function viewResult(r){
+  var p=me(),st=STYLE[r.disc1],blend=[r.disc1].concat(r.disc2?[r.disc2]:[]);
+  var bars=KEYS.slice().sort(function(a,b){return r.pct[b]-r.pct[a];}).map(function(s){
+    return '<div class="br" style="--c:'+STYLE[s].c+'"><span><b>'+s+'</b> · '+STYLE[s].n[0]+'</span><div class="tr"><i style="width:'+r.pct[s]+'%"></i></div><span class="v">'+r.pct[s]+'</span></div>';
+  }).join("");
+  var sec=r.disc2?'<p><span class="k">Gaya kedua: '+r.disc2+' ('+STYLE[r.disc2].n[0]+').</span> '+esc(STYLE[r.disc2].s[0])+'<span class="en">Secondary style: '+STYLE[r.disc2].n[1]+'. '+esc(STYLE[r.disc2].s[1])+'</span></p>':'';
+  $("#app").innerHTML=
+   '<div class="card"><div class="res-head"><div class="ic">✓</div><h2>Terima kasih, '+esc(p?p.name:"")+'!<span class="en">Your result has been recorded.</span></h2>'+
+   '<div class="blend">'+blend.map(function(s){return '<span style="--c:'+STYLE[s].c+'">'+s+'</span>';}).join("")+'</div>'+
+   '<div style="font-weight:700;color:var(--navy);margin-top:4px">Gaya kerja anda: '+blend.join("/")+'</div></div></div>'+
+   '<div class="card"><h2>Profil skor<span class="en">Score profile (0–100; garis tengah = 50)</span></h2><div class="bars">'+bars+'</div></div>'+
+   '<div class="card desc"><h2>'+r.disc1+' · '+st.n[0]+'<span class="en">'+st.n[1]+'</span></h2>'+
+   '<h3>Kekuatan · Strengths</h3><p>'+bi(st.s)+'</p>'+
+   '<h3>Titik buta · Blind spot</h3><p>'+bi(st.b)+'</p>'+
+   '<h3>Fokus pembangunan · Development focus</h3><p>'+bi(st.g)+'</p>'+sec+
+   '<p class="hint" style="margin-top:10px">Kita akan bincangkan keputusan ini dalam sesi Modul 1A. Tiada gaya yang lebih baik daripada gaya lain; setiap gaya membawa kekuatan berbeza kepada pasukan.<span class="en">We will discuss this in Module 1A. No style is better than another; each brings different strengths to a team.</span></p></div>'+foot();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+viewStart();
+run("getParticipants").then(function(d){S.list=d.list;S.needCode=d.needCode;S.loaded=true;if(S.step===-1)viewStart();},
+  function(e){S.loaded=true;var b=$("#names");if(b)b.innerHTML='<div class="loading">'+esc((e&&e.message)||"Gagal memuatkan senarai.")+'</div>';});
+})();
+</script>
+</body>
+</html>
