@@ -82,6 +82,23 @@
   .desc p{margin:0 0 8px;font-size:14px;line-height:1.55}
   .desc .k{font-weight:700;color:var(--navy)}
   .foot{text-align:center;font-size:12px;color:var(--mut);margin-top:18px}
+  input[type=email]{width:100%;font:inherit;font-size:16px;padding:12px 13px;border:1.5px solid var(--line);border-radius:12px;background:#fff;color:var(--ink)}
+  .ver{display:grid;grid-template-columns:auto 1fr;gap:8px 14px;margin:6px 0 0;font-size:15px}
+  .ver dt{color:var(--mut);font-size:13px;padding-top:2px}
+  .ver dd{margin:0;font-weight:600;color:var(--navy);word-break:break-word}
+  .muted{color:var(--mut);font-weight:400}
+  .act{display:flex;flex-wrap:wrap;gap:8px}
+  .act .btn{flex:1 1 150px;padding:12px 10px;font-size:14.5px}
+  .print-only{display:none}
+  @media print{
+    body{background:#fff}
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .hero{padding:14px 18px}
+    main{margin:0 auto}
+    .actions,.foot{display:none}
+    .card{box-shadow:none;break-inside:avoid;margin-bottom:10px}
+    .print-only{display:block;font-size:11px;color:#5f6b7a;text-align:center;margin-top:8px}
+  }
   .circ{display:block;width:100%;max-width:320px;margin:10px auto 0}
   .circ .ql{font:800 30px "Segoe UI",Roboto,Arial,sans-serif;text-anchor:middle}
   .circ .ax{font:600 10.5px "Segoe UI",Roboto,Arial,sans-serif;fill:#5f6b7a;text-anchor:middle}
@@ -262,7 +279,7 @@ var STYLE={
     g:["Tetapkan tahap 'cukup baik' dan had masa untuk setiap keputusan.","Define 'good enough' and set a time limit for each decision."]}
 };
 var KEYS=["D","I","S","C"];
-var S={list:[],i:null,needCode:false,code:"",step:-1,ans:[],order:[],busy:false};
+var S={list:[],i:null,needCode:false,code:"",email:"",role:"",step:-1,ans:[],order:[],busy:false};
 ITEMS.forEach(function(){S.ans.push({m:"",l:""});S.order.push(shuffle(KEYS.slice()));});
 
 function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
@@ -275,14 +292,30 @@ function run(fn,arg){
     return new Promise(function(res,rej){var r=google.script.run.withSuccessHandler(res).withFailureHandler(rej);arg===undefined?r[fn]():r[fn](arg);});
   }
   if(!API)return Promise.reject(new Error("Pautan pelayan (API) belum ditetapkan. Sila maklumkan urus setia."));
+  var body=Object.assign({action:fn},arg||{});
   var req=fn==="getParticipants"
     ? fetch(API+"?action=list",{method:"GET"})
-    : fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(arg)});
+    : fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(body)});
   return req.then(function(r){return r.json();}).then(function(j){if(!j.ok)throw new Error(j.error||"Ralat pelayan");return j.data;},
     function(e){throw new Error((e&&e.message&&e.message.indexOf("Failed to fetch")===-1)?e.message:"Tiada sambungan ke pelayan. Semak internet dan cuba lagi.");});
 }
 function foot(){return '<div class="foot">JANM WA13 Leadership Programme 2026 · 4–5 November 2026 · UUM</div>';}
 function me(){return S.list.filter(function(x){return x.i===S.i;})[0];}
+
+/* ---------- Skrin 1b: sahkan maklumat ---------- */
+function viewConfirm(){
+  var p=me();
+  $("#app").innerHTML=
+   '<div class="card"><h2>Sahkan maklumat anda<span class="en">Please verify your details</span></h2>'+
+   '<p class="hint">Pastikan maklumat di bawah betul sebelum mula. Keputusan akan direkodkan di bawah nama ini.<span class="en">Make sure these are correct. Your result will be recorded under this name.</span></p>'+
+   '<dl class="ver"><dt>Nama · Name</dt><dd>'+esc(p?p.name:"")+'</dd>'+
+   '<dt>E-mel · Email</dt><dd>'+esc(S.email)+'</dd>'+
+   '<dt>Jawatan · Position</dt><dd>'+(S.role?esc(S.role):'<span class="muted">—</span>')+'</dd></dl>'+
+   '</div>'+
+   '<div class="nav"><button class="btn ghost" id="fix">← Betulkan · Edit</button><button class="btn navy" id="start">Betul, mula ujian →</button></div>'+foot();
+  $("#fix").addEventListener("click",function(){viewStart();window.scrollTo({top:0});});
+  $("#start").addEventListener("click",function(){S.step=0;viewItem();window.scrollTo({top:0});});
+}
 
 /* ---------- Skrin 1: nama ---------- */
 function viewStart(){
@@ -297,13 +330,27 @@ function viewStart(){
    '<input type="text" id="q" placeholder="Taip nama untuk cari… / Type to search" autocomplete="off">'+
    '<div class="names" id="names"><div class="loading">Memuatkan senarai nama…</div></div>'+
    '<div class="chosen" id="chosen"></div>'+
-   (S.needCode?'<span class="lbl">Kod program <span class="en" style="display:inline">· Programme code</span></span><input type="text" id="code" autocomplete="off" value="'+esc(S.code)+'">':'')+
    '</div>'+
-   '<button class="btn navy full" id="go" disabled>Mula ujian · Start →</button>'+foot();
+   '<div class="card"><h2>Maklumat anda<span class="en">Your details</span></h2>'+
+   '<span class="lbl">E-mel <span class="en" style="display:inline">· Email (keputusan boleh dihantar ke sini)</span></span>'+
+   '<input type="email" id="email" autocomplete="email" inputmode="email" placeholder="nama@anm.gov.my" value="'+esc(S.email)+'">'+
+   '<span class="lbl">Jawatan <span class="en" style="display:inline">· Position (pilihan)</span></span>'+
+   '<input type="text" id="role" autocomplete="organization-title" placeholder="cth: Akauntan WA13, Ketua Unit" value="'+esc(S.role)+'">'+
+   (S.needCode?'<span class="lbl">Kod program <span class="en" style="display:inline">· Programme code</span></span><input type="text" id="code" autocomplete="off" value="'+esc(S.code)+'">':'')+
+   '<div class="err" id="err0" role="alert"></div>'+
+   '</div>'+
+   '<button class="btn navy full" id="go" disabled>Seterusnya · Next →</button>'+foot();
   $("#q").addEventListener("input",renderNames);
   $("#names").addEventListener("click",function(e){var b=e.target.closest("[data-i]");if(!b)return;S.i=Number(b.dataset.i);renderNames();});
   if($("#code"))$("#code").addEventListener("input",function(){S.code=this.value;});
-  $("#go").addEventListener("click",function(){S.step=0;viewItem();window.scrollTo({top:0});});
+  $("#email").addEventListener("input",function(){S.email=this.value.trim();});
+  $("#role").addEventListener("input",function(){S.role=this.value.trim();});
+  $("#go").addEventListener("click",function(){
+    var x=$("#err0");
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(S.email)){x.style.display="block";x.textContent="Sila masukkan e-mel yang sah. / Please enter a valid email.";$("#email").focus();return;}
+    if(S.needCode&&!S.code.trim()){x.style.display="block";x.textContent="Sila masukkan kod program. / Please enter the programme code.";$("#code").focus();return;}
+    viewConfirm();window.scrollTo({top:0});
+  });
   renderNames();
 }
 function renderNames(){
@@ -362,7 +409,7 @@ function viewSubmit(){
   $("#back").addEventListener("click",function(){S.step=miss.length?miss[0]-1:ITEMS.length-1;viewItem();});
   $("#send").addEventListener("click",function(){
     if(S.busy)return;S.busy=true;var b=this;b.disabled=true;b.innerHTML='<span class="spin"></span> Menghantar…';
-    run("submitDisc",{i:S.i,code:S.code,ans:S.ans,note:$("#note").value}).then(function(r){S.busy=false;viewResult(r);},function(e){
+    run("submitDisc",{i:S.i,code:S.code,email:S.email,role:S.role,ans:S.ans,note:$("#note").value}).then(function(r){S.busy=false;viewResult(r);},function(e){
       S.busy=false;b.disabled=false;b.textContent="Hantar · Submit";
       var x=$("#err");x.style.display="block";x.textContent=(e&&e.message)||"Gagal menghantar. Semak sambungan internet dan cuba lagi.";
     });
@@ -380,8 +427,8 @@ function circle(r){
    '<circle cx="'+c+'" cy="'+c+'" r="'+R+'" fill="none" stroke="#c9d2de"/>'+
    '<circle cx="'+c+'" cy="'+c+'" r="'+(R/2)+'" fill="none" stroke="#e3e8ef" stroke-dasharray="3 3"/>'+
    '<line x1="'+(c-R)+'" y1="'+c+'" x2="'+(c+R)+'" y2="'+c+'" stroke="#c9d2de"/><line x1="'+c+'" y1="'+(c-R)+'" x2="'+c+'" y2="'+(c+R)+'" stroke="#c9d2de"/>'+
-   '<text x="72" y="82" class="ql" fill="#d64545">D</text><text x="228" y="82" class="ql" fill="#c08c00">i</text>'+
-   '<text x="228" y="238" class="ql" fill="#2e9d5b">S</text><text x="72" y="238" class="ql" fill="#2f6fd6">C</text>'+
+   '<text x="96" y="106" class="ql" fill="#d64545">D</text><text x="204" y="106" class="ql" fill="#c08c00">i</text>'+
+   '<text x="204" y="214" class="ql" fill="#2e9d5b">S</text><text x="96" y="214" class="ql" fill="#2f6fd6">C</text>'+
    '<text x="150" y="20" class="ax">Aktif · Tegas</text><text x="150" y="292" class="ax">Tenang · Sederhana</text>'+
    '<text x="-30" y="154" class="ax" style="text-anchor:start">Logik</text><text x="330" y="154" class="ax" style="text-anchor:end">Mesra</text>'+
    '<circle cx="'+px.toFixed(1)+'" cy="'+py.toFixed(1)+'" r="11" fill="#0f2a4a" stroke="#fff" stroke-width="3"/>'+
@@ -403,6 +450,11 @@ function viewResult(r){
    '<div class="blend">'+blend.map(function(s){return '<span style="--c:'+STYLE[s].c+'">'+(s==="I"?"i":s)+'</span>';}).join("")+'</div>'+
    '<div style="font-weight:700;color:var(--navy);margin-top:4px">Gaya kerja anda: '+esc(r.blend)+'</div>'+
    '<p class="hint" style="margin:6px 0 0">'+bi(bd)+'</p></div></div>'+
+   '<div class="card actions"><div class="act">'+
+     '<button class="btn navy" id="bPrint">🖨️ Cetak / Simpan PDF</button>'+
+     '<button class="btn ghost" id="bMail">✉️ Hantar ke e-mel</button>'+
+     '<button class="btn ghost" id="bReset">↺ Mula semula</button></div>'+
+     '<div class="hint" id="mailMsg" style="margin:10px 0 0;text-align:center">Laporan akan dihantar ke <b>'+esc(S.email)+'</b>.</div></div>'+
    '<div class="card"><h2>Kedudukan anda pada bulatan DISC<span class="en">Your position on the DISC circle</span></h2>'+circle(r)+
    '<p class="hint" style="margin:8px 0 0"><b>'+esc(strength[0])+'</b><span class="en">'+esc(strength[1])+'</span></p>'+
    '<p class="hint" style="margin:6px 0 0">Titik yang jauh dari pusat menunjukkan kecenderungan yang lebih kuat ke arah gaya itu.<span class="en">The further the dot is from the centre, the stronger the pull toward that style.</span></p></div>'+
@@ -412,7 +464,21 @@ function viewResult(r){
    '<h3>Titik buta · Blind spot</h3><p>'+bi(st.b)+'</p>'+
    '<h3>Fokus pembangunan · Development focus</h3><p>'+bi(st.g)+'</p>'+sec+
    '<p class="hint" style="margin-top:10px">Kita akan bincangkan keputusan ini dalam sesi Modul 1A. Tiada gaya yang lebih baik daripada gaya lain; setiap gaya membawa kekuatan berbeza kepada pasukan.<span class="en">We will discuss this in Module 1A. No style is better than another; each brings different strengths to a team.</span></p>'+
-   '<p class="note">Ujian ini ialah alat refleksi bengkel berdasarkan model DISC dua dimensi Marston. Ia bukan instrumen psikometrik yang disahkan, dan tidak digunakan untuk keputusan perjawatan.<span class="en">This is a workshop reflection tool based on Marston\'s two-dimensional DISC model. It is not a validated psychometric instrument and is not used for HR decisions.</span></p></div>'+foot();
+   '<p class="note">Ujian ini ialah alat refleksi bengkel berdasarkan model DISC dua dimensi Marston. Ia bukan instrumen psikometrik yang disahkan, dan tidak digunakan untuk keputusan perjawatan.<span class="en">This is a workshop reflection tool based on Marston\'s two-dimensional DISC model. It is not a validated psychometric instrument and is not used for HR decisions.</span></p></div>'+
+   '<div class="print-only">Dicetak: '+new Date().toLocaleString("ms-MY")+' · '+esc(p?p.name:"")+' · '+esc(S.email)+(S.role?' · '+esc(S.role):'')+'</div>'+foot();
+  $("#bPrint").addEventListener("click",function(){window.print();});
+  $("#bReset").addEventListener("click",function(){
+    S.i=null;S.email="";S.role="";S.code="";S.step=-1;S.ans=[];S.order=[];
+    ITEMS.forEach(function(){S.ans.push({m:"",l:""});S.order.push(shuffle(KEYS.slice()));});
+    var pp=S.list.filter(function(x){return x.i===p.i;})[0];if(pp)pp.sent=true;
+    viewStart();window.scrollTo({top:0});
+  });
+  $("#bMail").addEventListener("click",function(){
+    var b=this,m=$("#mailMsg");if(b.disabled)return;b.disabled=true;b.textContent="Menghantar…";
+    run("emailResult",{i:p.i,code:S.code}).then(function(){
+      b.textContent="✓ Dihantar";m.innerHTML="Laporan telah dihantar ke <b>"+esc(S.email)+"</b>. Semak juga folder spam.";
+    },function(e){b.disabled=false;b.textContent="✉️ Hantar ke e-mel";m.textContent=(e&&e.message)||"Gagal menghantar e-mel.";});
+  });
   window.scrollTo({top:0,behavior:"smooth"});
 }
 
