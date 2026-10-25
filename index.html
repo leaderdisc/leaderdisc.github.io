@@ -58,6 +58,14 @@
   .nav{display:flex;gap:10px;margin-top:16px}
   .nav .btn{flex:1}
   .legend{font-size:12.5px;color:var(--mut);margin-top:10px;line-height:1.5}
+  .saved{margin-top:12px;background:#e8f6ee;color:var(--ok);border-radius:10px;padding:10px 12px;font-size:13.5px;font-weight:600}
+  .saved .en{color:#3c8a5c}
+  .prog{justify-content:space-between}
+  .done-n{color:var(--ok);font-weight:600}
+  .dots{display:flex;flex-wrap:wrap;gap:6px;margin:-4px 0 14px}
+  .dot{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--line);background:#fff;font:inherit;font-size:11.5px;color:var(--mut);cursor:pointer;padding:0}
+  .dot.ok{background:var(--ok);border-color:var(--ok);color:#fff}
+  .dot.cur{box-shadow:0 0 0 2px var(--gold);border-color:var(--gold);font-weight:700}
   /* keputusan */
   .res-head{text-align:center;padding:6px 0 4px}
   .res-head .ic{width:60px;height:60px;border-radius:50%;background:#e8f6ee;color:var(--ok);display:grid;place-items:center;font-size:30px;margin:0 auto 10px}
@@ -257,7 +265,8 @@ function viewItem(){
   var k=S.step,it=ITEMS[k],a=S.ans[k],n=ITEMS.length;
   $("#app").innerHTML=
    '<div class="card">'+
-   '<div class="prog"><span>'+(k+1)+' / '+n+'</span><div class="bar"><i style="width:'+((k)/n*100)+'%"></i></div></div>'+
+   '<div class="prog"><span>Soalan '+(k+1)+' / '+n+'</span><span class="done-n">'+S.ans.filter(function(x){return x.m&&x.l;}).length+' dijawab</span></div>'+
+   '<div class="dots">'+S.ans.map(function(x,j){return '<button type="button" data-go="'+j+'" class="dot'+(x.m&&x.l?' ok':'')+(j===k?' cur':'')+'" aria-label="Soalan '+(j+1)+'">'+(j+1)+'</button>';}).join("")+'</div>'+
    '<div class="stem">'+bi(it.q)+'</div>'+
    '<div class="opts">'+S.order[k].map(function(s){
       var cls=a.m===s?" m":a.l===s?" l":"";
@@ -265,19 +274,20 @@ function viewItem(){
        '<div class="pick"><button type="button" class="pm" data-s="'+s+'" data-t="m" aria-pressed="'+(a.m===s)+'">✓ Paling · Most</button>'+
        '<button type="button" class="pl" data-s="'+s+'" data-t="l" aria-pressed="'+(a.l===s)+'">✗ Paling kurang · Least</button></div></div>';
    }).join("")+'</div>'+
-   '<div class="legend">Pilih satu <b style="color:var(--ok)">Paling</b> dan satu <b style="color:var(--bad)">Paling kurang</b>.</div>'+
+   (a.m&&a.l?'<div class="saved">✓ Jawapan soalan '+(k+1)+' direkodkan. Tekan <b>Seterusnya</b>.<span class="en">Answer recorded. Tap Next.</span></div>'
+     :'<div class="legend">Pilih satu <b style="color:var(--ok)">Paling</b> dan satu <b style="color:var(--bad)">Paling kurang</b>.'+(a.m||a.l?' <b>Tinggal satu lagi.</b>':'')+'</div>')+
    '<div class="nav"><button class="btn ghost" id="back">← Kembali</button>'+
    '<button class="btn navy" id="next"'+(a.m&&a.l?'':' disabled')+'>'+(k===n-1?'Semak & hantar':'Seterusnya →')+'</button></div>'+
    '</div>'+foot();
   $(".opts").addEventListener("click",function(e){
     var b=e.target.closest("[data-s]");if(!b)return;
-    var s=b.dataset.s,t=b.dataset.t,o=t==="m"?"l":"m",wasDone=a.m&&a.l;
+    var s=b.dataset.s,t=b.dataset.t,o=t==="m"?"l":"m",y=window.scrollY;
     a[t]=a[t]===s?"":s; if(a[o]===s)a[o]="";
-    viewItem();
-    if(!wasDone&&a.m&&a.l&&k<n-1)setTimeout(function(){if(S.step===k){S.step++;viewItem();}},450);
+    viewItem(); window.scrollTo(0,y);
   });
-  $("#back").addEventListener("click",function(){if(k===0){S.step=-1;viewStart();}else{S.step--;viewItem();}});
-  $("#next").addEventListener("click",function(){if(k===n-1)viewSubmit();else{S.step++;viewItem();}});
+  $(".dots").addEventListener("click",function(e){var b=e.target.closest("[data-go]");if(!b)return;S.step=Number(b.dataset.go);viewItem();window.scrollTo({top:0});});
+  $("#back").addEventListener("click",function(){if(k===0){S.step=-1;viewStart();}else{S.step--;viewItem();}window.scrollTo({top:0});});
+  $("#next").addEventListener("click",function(){if(k===n-1)viewSubmit();else{S.step++;viewItem();}window.scrollTo({top:0});});
 }
 
 /* ---------- Skrin 3: semak & hantar ---------- */
