@@ -310,7 +310,8 @@ function viewConfirm(){
    '<p class="hint">Pastikan maklumat di bawah betul sebelum mula. Keputusan akan direkodkan di bawah nama ini.<span class="en">Make sure these are correct. Your result will be recorded under this name.</span></p>'+
    '<dl class="ver"><dt>Nama · Name</dt><dd>'+esc(p?p.name:"")+'</dd>'+
    '<dt>E-mel · Email</dt><dd>'+esc(S.email)+'</dd>'+
-   '<dt>Jawatan · Position</dt><dd>'+(S.role?esc(S.role):'<span class="muted">—</span>')+'</dd></dl>'+
+   '<dt>Jawatan · Position</dt><dd>'+(S.role?esc(S.role):'<span class="muted">—</span>')+'</dd>'+
+   (S.needCode?'<dt>Kod program · Code</dt><dd>'+esc(S.code.toUpperCase())+'</dd>':'')+'</dl>'+
    '</div>'+
    '<div class="nav"><button class="btn ghost" id="fix">← Betulkan · Edit</button><button class="btn navy" id="start">Betul, mula ujian →</button></div>'+foot();
   $("#fix").addEventListener("click",function(){viewStart();window.scrollTo({top:0});});
@@ -347,6 +348,8 @@ function viewStart(){
   $("#role").addEventListener("input",function(){S.role=this.value.trim();});
   $("#go").addEventListener("click",function(){
     var x=$("#err0");
+    /* baca terus dari kotak (termasuk autofill pelayar yang tidak mencetuskan 'input') */
+    S.email=$("#email").value.trim(); S.role=$("#role").value.trim(); if($("#code"))S.code=$("#code").value.trim();
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(S.email)){x.style.display="block";x.textContent="Sila masukkan e-mel yang sah. / Please enter a valid email.";$("#email").focus();return;}
     if(S.needCode&&!S.code.trim()){x.style.display="block";x.textContent="Sila masukkan kod program. / Please enter the programme code.";$("#code").focus();return;}
     viewConfirm();window.scrollTo({top:0});
