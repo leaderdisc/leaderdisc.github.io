@@ -356,7 +356,16 @@ function viewStart(){
     S.email=$("#email").value.trim(); S.role=$("#role").value.trim(); if($("#code"))S.code=$("#code").value.trim();
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(S.email)){x.style.display="block";x.textContent="Sila masukkan e-mel yang sah. / Please enter a valid email.";$("#email").focus();return;}
     if(S.needCode&&!S.code.trim()){x.style.display="block";x.textContent="Sila masukkan kod program. / Please enter the programme code.";$("#code").focus();return;}
-    viewConfirm();window.scrollTo({top:0});
+    if(!S.needCode){viewConfirm();window.scrollTo({top:0});return;}
+    /* semak kod program di pelayan SEBELUM ujian bermula */
+    var g=$("#go");g.disabled=true;g.textContent="Menyemak kod… · Checking…";
+    var done=function(){g.disabled=false;g.textContent="Seterusnya · Next →";};
+    fetch(API+"?action=check&code="+encodeURIComponent(S.code.trim()),{method:"GET"})
+      .then(function(r){return r.json();})
+      .then(function(j){done();
+        if(!j.ok){x.style.display="block";x.textContent=(j.error||"Kod program tidak betul.")+" / Incorrect programme code.";$("#code").focus();return;}
+        x.style.display="none";viewConfirm();window.scrollTo({top:0});
+      },function(){done();x.style.display="block";x.textContent="Tiada sambungan ke pelayan. Semak internet dan cuba lagi. / No connection, please try again.";});
   });
   renderNames();
 }
